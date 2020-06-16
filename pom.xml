@@ -10,11 +10,12 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>reader</module>
+    <module>identity</module>
+    <module>common</module>
   </modules>
 
-  <name>tracking</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <name>Attendance Tracking Companion Code</name>
+  <url>https://github.com/tsuyoi/medium-attendance-tracking</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -1,15 +1,8 @@
 package org.tsuyoi.edgecomp.examples;
 
-import edu.uky.pml.badge.common.BadgeCheckInStatics;
-import edu.uky.pml.badge.common.SwipeRecord;
-import edu.uky.pml.badge.common.Translator;
-import io.cresco.library.data.TopicType;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.HidDevice;
 import org.tsuyoi.edgecomp.examples.reader.CardReaderTask;
 
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
 import java.util.HashMap;
 import java.util.Map;
 
