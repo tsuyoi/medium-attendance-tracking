@@ -1,15 +1,14 @@
 package org.tsuyoi.edgecomp.examples.reader;
 
-import com.google.gson.Gson;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.*;
 
 public class CardReader {
-    private Integer vendorId;
-    private Integer productId;
-    private int packetLength;
+    private final Integer vendorId;
+    private final Integer productId;
+    private final int packetLength;
     public String serialNumber;
-    private CardReaderTask task;
+    private final CardReaderTask task;
     private CardReaderWorker cardReaderWorker = null;
 
     public CardReader(Integer vendorId, Integer productId, int packetLength, String serialNumber,
@@ -45,9 +44,9 @@ public class CardReader {
     }
 
     private class CardReaderWorker implements Runnable {
-        private Integer vendorId;
-        private Integer productId;
-        private int packetLength;
+        private final Integer vendorId;
+        private final Integer productId;
+        private final int packetLength;
         public String serialNumber;
         private boolean running = true;
 
@@ -64,11 +63,8 @@ public class CardReader {
 
         @Override
         public void run() {
-            Gson gson = new Gson();
             byte[] piece = new byte[packetLength];
-            String data = "";
             try {
-                //Thread.sleep(15000);
                 HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
                 hidServicesSpecification.setAutoShutdown(true);
                 hidServicesSpecification.setScanInterval(500);
@@ -77,10 +73,6 @@ public class CardReader {
 
                 // Get HID services using custom specification
                 HidServices hidServices = HidManager.getHidServices(hidServicesSpecification);
-
-                // Start the services
-                System.out.println("Starting HID services.");
-                //hidServices.start();
 
                 for (HidDevice hidDevice : hidServices.getAttachedHidDevices()) {
                     System.out.println(hidDevice.toString());
@@ -111,10 +103,6 @@ public class CardReader {
                         }
                     }
                 }
-                System.out.println("Freeing resources");
-                //hidDevice.close();
-                //hidServices.stop();
-                //hidServices.shutdown();
             } catch (NullPointerException e) {
                 System.err.println("Null pointer exception: " + e.getMessage());
                 System.err.println("Null pointer exception:\n" + ExceptionUtils.getStackTrace(e));
