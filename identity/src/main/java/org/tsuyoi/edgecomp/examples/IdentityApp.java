@@ -1,11 +1,12 @@
 package org.tsuyoi.edgecomp.examples;
 
+import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.tsuyoi.edgecomp.examples.identity.IdentityService;
 import org.tsuyoi.edgecomp.examples.identity.LookupRequest;
 import org.tsuyoi.edgecomp.examples.identity.LookupResult;
-import org.tsuyoi.edgecomp.examples.identity.LookupService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,13 +14,19 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 
 public class IdentityApp {
-    private static LookupService lookupService;
+    private static IdentityService identityService;
 
     public static void main( String[] args ) throws IOException {
-        lookupService = new LookupServiceImpl(
+        identityService = new IdentityServiceImpl(
                 "fake-user-name", "fake-first-name", "fake-last-name");
         HttpServer server = HttpServer.create(new InetSocketAddress(8500), 0);
         HttpContext context = server.createContext("/");
+        context.setAuthenticator(new BasicAuthenticator("get") {
+            @Override
+            public boolean checkCredentials(String user, String pass) {
+                return user.equals("user") && pass.equals("password");
+            }
+        });
         context.setHandler(IdentityApp::handleRequest);
         server.start();
     }
@@ -30,18 +37,18 @@ public class IdentityApp {
         String response = "Content not found";
         if (requestURI.getPath().equals("/lookup")) {
             if (requestURI.getQuery() != null) {
-                String[] query = requestURI.getQuery().split("&");
-                if (query.length > 0) {
+                String[] params = requestURI.getQuery().split("&");
+                if (params.length > 0) {
                     String id = null;
-                    for (int i = 0; i < query.length; i++) {
-                        String[] paramParts = query[i].split("=");
+                    for (String param : params) {
+                        String[] paramParts = param.split("=");
                         if (paramParts.length > 1 && paramParts[0].equals("id"))
                             id = paramParts[1];
                     }
                     if (id != null) {
                         LookupRequest request = new LookupRequest(id);
                         System.out.println(request);
-                        LookupResult result = lookupService.lookup(request);
+                        LookupResult result = identityService.lookup(request);
                         response = result.toString();
                         resCode = 200;
                         exchange.getResponseHeaders().set("Content-Type", "application/json");

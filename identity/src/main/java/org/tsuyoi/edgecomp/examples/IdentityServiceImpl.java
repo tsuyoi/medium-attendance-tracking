@@ -1,15 +1,15 @@
 package org.tsuyoi.edgecomp.examples;
 
+import org.tsuyoi.edgecomp.examples.identity.IdentityService;
 import org.tsuyoi.edgecomp.examples.identity.LookupRequest;
 import org.tsuyoi.edgecomp.examples.identity.LookupResult;
-import org.tsuyoi.edgecomp.examples.identity.LookupService;
 
-public class LookupServiceImpl implements LookupService {
+public class IdentityServiceImpl implements IdentityService {
     private String fakeUserName;
     private String fakeFirstName;
     private String fakeLastName;
 
-    public LookupServiceImpl(String userName, String firstName, String lastName) {
+    public IdentityServiceImpl(String userName, String firstName, String lastName) {
         this.fakeUserName = userName;
         this.fakeFirstName = firstName;
         this.fakeLastName = lastName;

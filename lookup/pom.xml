@@ -9,38 +9,27 @@
     <groupId>org.tsuyoi.edgecomp.examples</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <artifactId>reader</artifactId>
+  <artifactId>lookup</artifactId>
   <packaging>bundle</packaging>
 
-  <name>Magnetic Card Reader Module</name>
+  <name>Identity Query Module</name>
 
   <properties>
-    <mainClass>org.tsuyoi.edgecomp.examples.ReaderApp</mainClass>
-    <jarName>CardReaderApp</jarName>
+    <mainClass>org.tsuyoi.edgecomp.examples.LookupApp</mainClass>
+    <jarName>LookupApp</jarName>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>${gson.version}</version>
+      <groupId>org.tsuyoi.edgecomp.examples</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0-SNAPSHOT</version>
     </dependency>
 
     <dependency>
-      <groupId>org.hid4java</groupId>
-      <artifactId>hid4java</artifactId>
-      <version>0.5.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-      <version>4.2.2</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.12</version>
     </dependency>
   </dependencies>
 
@@ -94,11 +83,11 @@
         <configuration>
           <instructions>
             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-            <Bundle-Name>AttendanceTrackingCardReader</Bundle-Name>
-            <Bundle-Description>Card reader module for attendance tracking application</Bundle-Description>
+            <Bundle-Name>AttendanceTrackingIdentity</Bundle-Name>
+            <Bundle-Description>Identity module for attendance tracking application</Bundle-Description>
             <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.examples.*;org.hid4java.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.examples.*;org.apache.httpcomponents.*;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>

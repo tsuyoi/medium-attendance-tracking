@@ -1,5 +1,5 @@
 package org.tsuyoi.edgecomp.examples.identity;
 
-public interface LookupService {
+public interface IdentityService {
     public LookupResult lookup(LookupRequest request);
 }
