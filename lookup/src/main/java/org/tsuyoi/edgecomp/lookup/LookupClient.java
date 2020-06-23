@@ -1,4 +1,4 @@
-package org.tsuyoi.edgecomp.examples.lookup;
+package org.tsuyoi.edgecomp.lookup;
 
 import com.google.gson.Gson;
 import org.apache.http.HttpEntity;
@@ -11,7 +11,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.tsuyoi.edgecomp.examples.identity.LookupResult;
+import org.tsuyoi.edgecomp.identity.LookupResult;
 
 import java.io.IOException;
 

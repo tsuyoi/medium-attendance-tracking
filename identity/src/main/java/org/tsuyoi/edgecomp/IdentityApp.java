@@ -1,12 +1,12 @@
-package org.tsuyoi.edgecomp.examples;
+package org.tsuyoi.edgecomp;
 
 import com.sun.net.httpserver.BasicAuthenticator;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
-import org.tsuyoi.edgecomp.examples.identity.IdentityService;
-import org.tsuyoi.edgecomp.examples.identity.LookupRequest;
-import org.tsuyoi.edgecomp.examples.identity.LookupResult;
+import org.tsuyoi.edgecomp.identity.IdentityService;
+import org.tsuyoi.edgecomp.identity.LookupRequest;
+import org.tsuyoi.edgecomp.identity.LookupResult;
 
 import java.io.IOException;
 import java.io.OutputStream;

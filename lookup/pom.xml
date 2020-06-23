@@ -6,7 +6,7 @@
 
   <parent>
     <artifactId>tracking</artifactId>
-    <groupId>org.tsuyoi.edgecomp.examples</groupId>
+    <groupId>org.tsuyoi.edgecomp</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>lookup</artifactId>
@@ -15,13 +15,13 @@
   <name>Identity Query Module</name>
 
   <properties>
-    <mainClass>org.tsuyoi.edgecomp.examples.LookupApp</mainClass>
+    <mainClass>org.tsuyoi.edgecomp.LookupApp</mainClass>
     <jarName>LookupApp</jarName>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.tsuyoi.edgecomp.examples</groupId>
+      <groupId>org.tsuyoi.edgecomp</groupId>
       <artifactId>common</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
@@ -87,7 +87,7 @@
             <Bundle-Description>Identity module for attendance tracking application</Bundle-Description>
             <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.examples.*;org.apache.httpcomponents.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.*;org.apache.httpcomponents.*;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>

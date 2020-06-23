@@ -1,6 +1,6 @@
-package org.tsuyoi.edgecomp.examples;
+package org.tsuyoi.edgecomp;
 
-import org.tsuyoi.edgecomp.examples.reader.CardReader;
+import org.tsuyoi.edgecomp.preader.CardReader;
 
 public class ReaderApp {
     public static void main( String[] args ) {

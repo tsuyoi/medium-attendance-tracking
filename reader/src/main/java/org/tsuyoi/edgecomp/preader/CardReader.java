@@ -1,4 +1,4 @@
-package org.tsuyoi.edgecomp.examples.reader;
+package org.tsuyoi.edgecomp.preader;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.*;
@@ -103,6 +103,8 @@ public class CardReader {
                         }
                     }
                 }
+                System.out.println("Freeing resources");
+                hidDevice.close();
             } catch (NullPointerException e) {
                 System.err.println("Null pointer exception: " + e.getMessage());
                 System.err.println("Null pointer exception:\n" + ExceptionUtils.getStackTrace(e));

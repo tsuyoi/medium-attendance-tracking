@@ -1,15 +1,15 @@
-package org.tsuyoi.edgecomp.examples;
+package org.tsuyoi.edgecomp.preader;
 
 import org.hid4java.HidDevice;
-import org.tsuyoi.edgecomp.examples.reader.CardReaderTask;
+import org.tsuyoi.edgecomp.AppCardReaderTask;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AppCardReaderTask implements CardReaderTask {
+public class PluginReaderTask implements CardReaderTask {
     private String data;
 
-    public AppCardReaderTask() {
+    public PluginReaderTask() {
         data = "";
     }
 
@@ -31,7 +31,7 @@ public class AppCardReaderTask implements CardReaderTask {
 
     @Override
     public void readPiece(byte[] piece) {
-        String character = Translator.translate(piece);
+        String character = AppCardReaderTask.Translator.translate(piece);
         if (character != null) {
             if (character.equals("\n")) {
                 int stripeOneStart = data.indexOf("%") + 1;

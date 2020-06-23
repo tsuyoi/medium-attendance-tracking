@@ -1,4 +1,4 @@
-package org.tsuyoi.edgecomp.examples.identity;
+package org.tsuyoi.edgecomp.identity;
 
 import com.google.gson.Gson;
 

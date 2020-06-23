@@ -1,8 +1,8 @@
-package org.tsuyoi.edgecomp.examples;
+package org.tsuyoi.edgecomp;
 
-import org.tsuyoi.edgecomp.examples.identity.IdentityService;
-import org.tsuyoi.edgecomp.examples.identity.LookupRequest;
-import org.tsuyoi.edgecomp.examples.identity.LookupResult;
+import org.tsuyoi.edgecomp.identity.IdentityService;
+import org.tsuyoi.edgecomp.identity.LookupRequest;
+import org.tsuyoi.edgecomp.identity.LookupResult;
 
 public class IdentityServiceImpl implements IdentityService {
     private String fakeUserName;

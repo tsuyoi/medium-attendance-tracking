@@ -1,4 +1,4 @@
-package org.tsuyoi.edgecomp.examples.reader;
+package org.tsuyoi.edgecomp.preader;
 
 import org.hid4java.HidDevice;
 

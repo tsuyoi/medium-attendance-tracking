@@ -6,7 +6,7 @@
 
   <parent>
     <artifactId>tracking</artifactId>
-    <groupId>org.tsuyoi.edgecomp.examples</groupId>
+    <groupId>org.tsuyoi.edgecomp</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>identity</artifactId>
@@ -15,13 +15,13 @@
   <name>Identity Service Module</name>
 
   <properties>
-    <mainClass>org.tsuyoi.edgecomp.examples.IdentityApp</mainClass>
+    <mainClass>org.tsuyoi.edgecomp.IdentityApp</mainClass>
     <jarName>IdentityApp</jarName>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>org.tsuyoi.edgecomp.examples</groupId>
+      <groupId>org.tsuyoi.edgecomp</groupId>
       <artifactId>common</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
@@ -81,7 +81,7 @@
             <Bundle-Description>Identity module for attendance tracking application</Bundle-Description>
             <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.examples.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.*;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>
