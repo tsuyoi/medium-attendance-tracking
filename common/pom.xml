@@ -20,6 +20,16 @@
       <artifactId>gson</artifactId>
       <version>${gson.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.18</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -45,7 +55,7 @@
             <Bundle-Description>Common code for attendance tracking application</Bundle-Description>
             <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.*;org.apache.commons.*;commons-io.*;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>

@@ -1,4 +1,4 @@
-package org.tsuyoi.edgecomp.preader;
+package org.tsuyoi.edgecomp.collector;
 
 import io.cresco.library.agent.AgentService;
 import io.cresco.library.messaging.MsgEvent;
@@ -8,7 +8,6 @@ import io.cresco.library.plugin.PluginService;
 import io.cresco.library.utilities.CLogger;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.*;
-import org.tsuyoi.edgecomp.AppCardReaderTask;
 
 import java.util.Map;
 
@@ -25,8 +24,7 @@ public class Plugin implements PluginService {
     private Executor executor;
     private CLogger logger;
     private Map<String,Object> map;
-    private AppCardReaderTask cardReaderTask;
-    private CardReader cardReader;
+    private CollectionEngine collectionEngine;
 
     @Activate
     void activate(BundleContext context, Map<String, Object> map) {
@@ -70,7 +68,8 @@ public class Plugin implements PluginService {
             if(pluginBuilder == null) {
                 pluginBuilder = new PluginBuilder(this.getClass().getName(), context, map);
                 this.logger = pluginBuilder.getLogger(Plugin.class.getName(), CLogger.Level.Trace);
-                this.executor = new PluginExecutor(pluginBuilder);
+                this.collectionEngine = new CollectionEngine(pluginBuilder);
+                this.executor = new ExecutorImpl(pluginBuilder, collectionEngine);
                 pluginBuilder.setExecutor(executor);
 
                 while (!pluginBuilder.getAgentService().getAgentState().isActive()) {
@@ -80,9 +79,7 @@ public class Plugin implements PluginService {
                 //set plugin active
                 pluginBuilder.setIsActive(true);
 
-                CardReaderTask task = new PluginReaderTask(pluginBuilder);
-                cardReader = new CardReader(0x0801, 0x01, 8, null, task);
-                cardReader.start();
+                collectionEngine.start();
             }
             return true;
         } catch(Exception ex) {
@@ -95,8 +92,8 @@ public class Plugin implements PluginService {
 
     @Override
     public boolean isStopped() {
-        if (cardReader != null)
-            cardReader.stop();
+        if (collectionEngine != null)
+            collectionEngine.stop();
         if(pluginBuilder != null) {
             pluginBuilder.setExecutor(null);
             pluginBuilder.setIsActive(false);

@@ -17,6 +17,12 @@
   <dependencies>
     <dependency>
       <groupId>org.tsuyoi.edgecomp</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.tsuyoi.edgecomp</groupId>
       <artifactId>reader</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
@@ -53,7 +59,7 @@
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
             <Bundle-Activator>org.tsuyoi.edgecomp.preader.Activator</Bundle-Activator>
             <Import-Package>*;resolution:=optional</Import-Package>
-            <Export-Package>org.tsuyoi.edgecomp.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.*;com.google.gson.*;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>

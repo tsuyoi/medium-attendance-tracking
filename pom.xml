@@ -9,6 +9,7 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
+    <module>collector</module>
     <module>reader</module>
     <module>identity</module>
     <module>common</module>

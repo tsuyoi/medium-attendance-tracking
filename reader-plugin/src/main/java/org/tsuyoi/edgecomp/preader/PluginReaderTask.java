@@ -1,36 +1,60 @@
 package org.tsuyoi.edgecomp.preader;
 
+import com.google.gson.Gson;
+import io.cresco.library.data.TopicType;
+import io.cresco.library.plugin.PluginBuilder;
+import io.cresco.library.utilities.CLogger;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.HidDevice;
 import org.tsuyoi.edgecomp.AppCardReaderTask;
+import org.tsuyoi.edgecomp.common.PluginStatics;
+import org.tsuyoi.edgecomp.common.SwipeRecord;
 
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PluginReaderTask implements CardReaderTask {
     private String data;
+    private PluginBuilder pluginBuilder;
+    private CLogger logger;
 
-    public PluginReaderTask() {
-        data = "";
+    private String siteId;
+
+    public PluginReaderTask(PluginBuilder pluginBuilder) {
+        this.pluginBuilder = pluginBuilder;
+        this.logger = pluginBuilder.getLogger(PluginReaderTask.class.getName(), CLogger.Level.Info);
+        setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
+        this.data = "";
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 
     @Override
     public void startLoop() {
-        System.out.println("Starting loop");
+        logger.trace("Starting loop");
     }
 
     @Override
     public void startRead() {
-        System.out.println("Starting read");
+        logger.trace("Starting read");
     }
 
     @Override
     public void readError(HidDevice device) {
-        System.out.println("Handling error");
-        System.err.println("Error: " + device.getLastErrorMessage());
+        logger.error("Handling error");
+        logger.error("Error: " + device.getLastErrorMessage());
     }
 
     @Override
     public void readPiece(byte[] piece) {
+        Gson gson = new Gson();
         String character = AppCardReaderTask.Translator.translate(piece);
         if (character != null) {
             if (character.equals("\n")) {
@@ -53,8 +77,23 @@ public class PluginReaderTask implements CardReaderTask {
                     id = data.substring(stripeTwoStart, stripeTwoEnd);
                 else if (hasStripeThree && stripeThreeLength == 9)
                     id = data.substring(stripeThreeStart, stripeThreeEnd);
-                System.out.println("Data: " + data);
-                System.out.println("ID: " + id);
+                SwipeRecord record = new SwipeRecord(getSiteId(), data, id,
+                        pluginBuilder.getRegion(), pluginBuilder.getAgent(), pluginBuilder.getPluginID());
+                logger.info("New record: {}", record);
+                try {
+                    TextMessage updateMsg = pluginBuilder.getAgentService().getDataPlaneService()
+                            .createTextMessage();
+                    updateMsg.setText(gson.toJson(record));
+                    updateMsg.setStringProperty(PluginStatics.SWIPE_RECORD_DATA_PLANE_IDENTIFIER_KEY,
+                            PluginStatics.SWIPE_RECORD_DATA_PLANE_IDENTIFIER_VALUE);
+                    pluginBuilder.getAgentService().getDataPlaneService().sendMessage(TopicType.AGENT, updateMsg);
+                    updateMsg.setStringProperty(PluginStatics.SWIPE_RECORD_DATA_PLANE_IDENTIFIER_KEY,
+                            PluginStatics.getSiteSwipeRecordDataPlaneValue(getSiteId()));
+                    pluginBuilder.getAgentService().getDataPlaneService().sendMessage(TopicType.AGENT, updateMsg);
+                } catch (JMSException e) {
+                    logger.error("Failed to generate swipe message: {}, code: {}", e.getMessage(), e.getErrorCode());
+                    logger.trace("JMSException:\n" + ExceptionUtils.getStackTrace(e));
+                }
                 data = "";
             } else {
                 data += character;
@@ -64,7 +103,7 @@ public class PluginReaderTask implements CardReaderTask {
 
     @Override
     public void readComplete() {
-        System.out.println("Read complete");
+        logger.trace("Read complete");
     }
 
     public static class Translator {
