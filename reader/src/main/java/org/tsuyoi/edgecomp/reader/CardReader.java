@@ -1,4 +1,4 @@
-package org.tsuyoi.edgecomp.preader;
+package org.tsuyoi.edgecomp.reader;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.*;

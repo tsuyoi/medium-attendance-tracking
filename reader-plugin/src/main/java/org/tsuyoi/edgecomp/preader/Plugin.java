@@ -8,7 +8,8 @@ import io.cresco.library.plugin.PluginService;
 import io.cresco.library.utilities.CLogger;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.*;
-import org.tsuyoi.edgecomp.AppCardReaderTask;
+import org.tsuyoi.edgecomp.reader.CardReader;
+import org.tsuyoi.edgecomp.reader.CardReaderTask;
 
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class Plugin implements PluginService {
     private Executor executor;
     private CLogger logger;
     private Map<String,Object> map;
-    private AppCardReaderTask cardReaderTask;
+    private CardReaderTask cardReaderTask;
     private CardReader cardReader;
 
     @Activate
@@ -37,9 +38,9 @@ public class Plugin implements PluginService {
     @Modified
     void modified(BundleContext context, Map<String, Object> map) {
         if (logger != null)
-            logger.info("Modified Config Map PluginID:" + (String) map.get("pluginID"));
+            logger.info("Modified Config Map PluginID:" + map.get("pluginID"));
         else
-            System.out.println("Modified Config Map PluginID:" + (String) map.get("pluginID"));
+            System.out.println("Modified Config Map PluginID:" + map.get("pluginID"));
     }
 
     @Deactivate

@@ -1,7 +1,7 @@
 package org.tsuyoi.edgecomp;
 
 import org.hid4java.HidDevice;
-import org.tsuyoi.edgecomp.preader.CardReaderTask;
+import org.tsuyoi.edgecomp.reader.CardReaderTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,27 +34,7 @@ public class AppCardReaderTask implements CardReaderTask {
         String character = Translator.translate(piece);
         if (character != null) {
             if (character.equals("\n")) {
-                int stripeOneStart = data.indexOf("%") + 1;
-                int stripeOneEnd = data.indexOf("?");
-                int stripeTwoStart = data.indexOf(";") + 1;
-                int stripeTwoEnd = data.indexOf("=");
-                int stripeThreeStart = stripeTwoEnd + 1;
-                int stripeThreeEnd = data.lastIndexOf("?");
-                boolean hasStripeOne = stripeOneStart > 0;
-                int stripeOneLength = stripeOneEnd - stripeOneStart;
-                boolean hasStripeTwo = (stripeTwoEnd - stripeTwoStart) > 0;
-                int stripeTwoLength = stripeTwoEnd - stripeTwoStart;
-                boolean hasStripeThree = stripeThreeStart > 0;
-                int stripeThreeLength = stripeThreeEnd - stripeThreeStart;
-                String id = null;
-                if (hasStripeOne && stripeOneLength == 9)
-                    id = data.substring(stripeOneStart, stripeOneEnd);
-                else if (hasStripeTwo && stripeTwoLength == 9)
-                    id = data.substring(stripeTwoStart, stripeTwoEnd);
-                else if (hasStripeThree && stripeThreeLength == 9)
-                    id = data.substring(stripeThreeStart, stripeThreeEnd);
                 System.out.println("Data: " + data);
-                System.out.println("ID: " + id);
                 data = "";
             } else {
                 data += character;

@@ -6,9 +6,9 @@ import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.utilities.CLogger;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.HidDevice;
-import org.tsuyoi.edgecomp.AppCardReaderTask;
 import org.tsuyoi.edgecomp.common.PluginStatics;
 import org.tsuyoi.edgecomp.common.SwipeRecord;
+import org.tsuyoi.edgecomp.reader.CardReaderTask;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
@@ -55,7 +55,7 @@ public class PluginReaderTask implements CardReaderTask {
     @Override
     public void readPiece(byte[] piece) {
         Gson gson = new Gson();
-        String character = AppCardReaderTask.Translator.translate(piece);
+        String character = Translator.translate(piece);
         if (character != null) {
             if (character.equals("\n")) {
                 int stripeOneStart = data.indexOf("%") + 1;

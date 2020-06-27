@@ -98,7 +98,7 @@
             <Bundle-Description>Card reader module for attendance tracking application</Bundle-Description>
             <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.*;org.hid4java.*;org.apache.commons.*;com.sun.jna.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.reader.*;org.hid4java.*;org.apache.commons.*;com.sun.jna.*;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>
