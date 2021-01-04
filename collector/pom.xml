@@ -12,7 +12,7 @@
     <artifactId>collector</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Badge Swipe Collector</name>
+    <name>Badge Swipe Collector Plugin</name>
     <description>A plugin to collect magnetic card swipes from an endpoint.</description>
 
     <properties>

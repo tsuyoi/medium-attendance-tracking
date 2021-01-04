@@ -12,7 +12,7 @@
   <artifactId>preader</artifactId>
   <packaging>bundle</packaging>
 
-  <name>reader-plugin</name>
+  <name>Magnetic Card Reader Cresco Plugin</name>
 
   <dependencies>
     <dependency>
@@ -30,7 +30,11 @@
     <dependency>
       <groupId>org.hid4java</groupId>
       <artifactId>hid4java</artifactId>
-      <version>0.5.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
     </dependency>
   </dependencies>
 
@@ -59,7 +63,7 @@
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
             <Bundle-Activator>org.tsuyoi.edgecomp.preader.Activator</Bundle-Activator>
             <Import-Package>*;resolution:=optional</Import-Package>
-            <Export-Package>org.tsuyoi.edgecomp.*;com.google.gson.*;</Export-Package>
+            <Export-Package>org.tsuyoi.edgecomp.*;com.google.gson.*;org.hid4java.*;org.apache.*;com.sun.jna.*</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>

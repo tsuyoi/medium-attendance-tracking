@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.tsuyoi.edgecomp</groupId>
+    <artifactId>tracking</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>simulator</artifactId>
+  <packaging>bundle</packaging>
+
+  <name>Badge Swipe Simulator</name>
+  <description>A plugin to simulate the badge swipe endpoint.</description>
+
+  <properties>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>${gson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.tsuyoi.edgecomp</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>28.0-jre</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.version}</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>${maven.bundle.compiler.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Name>FakeGen</Bundle-Name>
+            <Bundle-Description>Badge Swipe Plugin</Bundle-Description>
+            <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
+            <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
+            <Bundle-Activator>org.tsuyoi.edgecomp.simulator.Activator</Bundle-Activator>
+            <Import-Package>*;resolution:=optional</Import-Package>
+            <Export-Package>org.tsuyoi.edgecomp.simulator;org.tsuyoi.edgecomp.common;</Export-Package>
+            <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
+            <Provide-Capability>osgi.service;objectClass=task.TaskService</Provide-Capability>
+            <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

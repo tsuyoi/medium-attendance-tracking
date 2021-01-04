@@ -16,8 +16,8 @@ import java.util.List;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class CollectionEngine {
-    private PluginBuilder pluginBuilder;
-    private CLogger logger;
+    final private PluginBuilder pluginBuilder;
+    final private CLogger logger;
 
     private String siteId;
     private String listenerId = null;
@@ -46,7 +46,7 @@ public class CollectionEngine {
                             MsgEvent ack = pluginBuilder.getGlobalPluginMsgEvent(MsgEvent.Type.INFO,
                                     swipe.getCrescoRegion(), swipe.getCrescoAgent(), swipe.getCrescoPlugin());
                             ack.setParam("success", Boolean.toString(true));
-                            ack.setParam("name", "Some Name");
+                            ack.setParam("name", "Some Name"); // Todo: Lookup ID from identity provider
                             ack.setParam("id", swipe.getSwipe());
                             ack.setParam("time", swipe.getDate());
                             pluginBuilder.msgOut(ack);

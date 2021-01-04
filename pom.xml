@@ -14,7 +14,8 @@
     <module>identity</module>
     <module>common</module>
     <module>lookup</module>
-    <module>reader-plugin</module>
+    <module>preader</module>
+    <module>simulator</module>
   </modules>
 
   <name>Attendance Tracking Companion Code</name>
@@ -31,6 +32,8 @@
     <gson.version>2.8.5</gson.version>
     <lang3.version>3.9</lang3.version>
     <log4j.version>2.11.2</log4j.version>
+    <hid4java.version>0.7.0</hid4java.version>
+    <jna.version>5.6.0</jna.version>
   </properties>
 
   <dependencyManagement>
@@ -51,6 +54,18 @@
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-slf4j-impl</artifactId>
         <version>${log4j.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hid4java</groupId>
+        <artifactId>hid4java</artifactId>
+        <version>${hid4java.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>${jna.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>reader</artifactId>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
 
   <name>Magnetic Card Reader Module</name>
 
@@ -29,13 +29,11 @@
     <dependency>
       <groupId>org.hid4java</groupId>
       <artifactId>hid4java</artifactId>
-      <version>0.5.0</version>
     </dependency>
 
     <dependency>
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
-      <version>4.2.2</version>
     </dependency>
 
     <dependency>
@@ -85,24 +83,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${maven.bundle.compiler.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-            <Bundle-Name>AttendanceTrackingCardReader</Bundle-Name>
-            <Bundle-Description>Card reader module for attendance tracking application</Bundle-Description>
-            <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
-            <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.reader.*;org.hid4java.*;org.apache.commons.*;com.sun.jna.*;</Export-Package>
-            <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
-            <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
-          </instructions>
-        </configuration>
       </plugin>
     </plugins>
   </build>
