@@ -6,17 +6,19 @@ import org.tsuyoi.edgecomp.identity.LookupResult;
 
 public class IdentityServiceImpl implements IdentityService {
     private String fakeUserName;
+    private String fakeEmail;
     private String fakeFirstName;
     private String fakeLastName;
 
-    public IdentityServiceImpl(String userName, String firstName, String lastName) {
+    public IdentityServiceImpl(String userName, String email, String firstName, String lastName) {
         this.fakeUserName = userName;
+        this.fakeEmail = email;
         this.fakeFirstName = firstName;
         this.fakeLastName = lastName;
     }
 
     @Override
     public LookupResult lookup(LookupRequest request) {
-        return new LookupResult(request, fakeUserName, fakeFirstName, fakeLastName);
+        return new LookupResult(request, fakeUserName, fakeEmail, fakeFirstName, fakeLastName);
     }
 }

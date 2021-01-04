@@ -39,7 +39,7 @@ public class LookupRequest {
         Map<String, Object> properties = new HashMap<>();
         properties.put("id", getId());
         properties.put("created", getCreated());
-        properties.put("user_id", getUserId());
+        properties.put("userId", getUserId());
         return properties;
     }
 }

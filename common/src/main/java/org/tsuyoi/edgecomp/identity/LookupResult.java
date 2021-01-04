@@ -7,28 +7,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LookupResult {
-    private final String id;
     private final Date created = new Date();
 
     private LookupRequest request;
     private String userName;
+    private String userEmail;
     private String userFirstName;
     private String userLastName;
 
-    public LookupResult() {
-        this.id = java.util.UUID.randomUUID().toString();
-    }
-
-    public LookupResult(LookupRequest request, String userName, String userFirstName, String userLastName) {
-        this();
+    public LookupResult(LookupRequest request) {
         setRequest(request);
-        setUserName(userName);
-        setUserFirstName(userFirstName);
-        setUserLastName(userLastName);
     }
 
-    public String getId() {
-        return id;
+    public LookupResult(LookupRequest request, String username, String email, String firstName, String lastName) {
+        this(request);
+        setUserName(username);
+        setUserEmail(email);
+        setUserFirstName(firstName);
+        setUserLastName(lastName);
     }
 
     public LookupRequest getRequest() {
@@ -47,6 +43,13 @@ public class LookupResult {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getUserFirstName() {
@@ -71,12 +74,12 @@ public class LookupResult {
 
     public Map<String, Object> toJson() {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("id", getId());
         properties.put("request", getRequest().toJson());
         properties.put("created", getCreated());
-        properties.put("user_name", getUserName());
-        properties.put("user_first_name", getUserFirstName());
-        properties.put("user_last_name", getUserLastName());
+        properties.put("userName", getUserName());
+        properties.put("userEmail", getUserEmail());
+        properties.put("userFirstName", getUserFirstName());
+        properties.put("userLastName", getUserLastName());
         return properties;
     }
 }

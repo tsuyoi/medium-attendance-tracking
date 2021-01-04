@@ -3,7 +3,7 @@ package org.tsuyoi.edgecomp.simulator;
 import com.google.common.collect.EvictingQueue;
 import com.google.gson.Gson;
 import org.tsuyoi.edgecomp.common.PluginStatics;
-import org.tsuyoi.edgecomp.common.SwipeRecord;
+import org.tsuyoi.edgecomp.models.SwipeRecord;
 import io.cresco.library.data.TopicType;
 import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.utilities.CLogger;

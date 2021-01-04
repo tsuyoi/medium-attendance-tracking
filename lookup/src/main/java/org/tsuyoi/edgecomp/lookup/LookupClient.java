@@ -51,13 +51,13 @@ public class LookupClient {
                 .build();
              CloseableHttpResponse response = httpClient.execute(request)) {
 
-            System.out.println(response.getStatusLine().getStatusCode());
-
             HttpEntity entity = response.getEntity();
             if (entity != null) {
+                String result = EntityUtils.toString(entity);
+                System.out.println("Response: " + result);
                 Gson gson = new Gson();
                 try {
-                    ret = gson.fromJson(EntityUtils.toString(entity), LookupResult.class);
+                    ret = gson.fromJson(result, LookupResult.class);
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.err.println(e.getMessage());

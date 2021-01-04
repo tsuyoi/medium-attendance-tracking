@@ -7,7 +7,7 @@ import io.cresco.library.utilities.CLogger;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hid4java.HidDevice;
 import org.tsuyoi.edgecomp.common.PluginStatics;
-import org.tsuyoi.edgecomp.common.SwipeRecord;
+import org.tsuyoi.edgecomp.models.SwipeRecord;
 import org.tsuyoi.edgecomp.reader.CardReaderTask;
 
 import javax.jms.JMSException;

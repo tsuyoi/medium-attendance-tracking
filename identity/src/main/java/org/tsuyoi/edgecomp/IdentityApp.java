@@ -18,7 +18,7 @@ public class IdentityApp {
 
     public static void main( String[] args ) throws IOException {
         identityService = new IdentityServiceImpl(
-                "fake-user-name", "fake-first-name", "fake-last-name");
+                "fake-user-name", "fake-email", "fake-first-name", "fake-last-name");
         HttpServer server = HttpServer.create(new InetSocketAddress(8500), 0);
         HttpContext context = server.createContext("/");
         context.setAuthenticator(new BasicAuthenticator("get") {
@@ -47,7 +47,7 @@ public class IdentityApp {
                     }
                     if (id != null) {
                         LookupRequest request = new LookupRequest(id);
-                        System.out.println(request);
+                        System.out.println("Request: " + request);
                         LookupResult result = identityService.lookup(request);
                         response = result.toString();
                         resCode = 200;
@@ -65,6 +65,8 @@ public class IdentityApp {
                 response = "You must supply an 'id' query parameter";
             }
         }
+        System.out.println("ResponseCode: " + resCode);
+        System.out.println("Response: " + response);
         exchange.sendResponseHeaders(resCode, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());

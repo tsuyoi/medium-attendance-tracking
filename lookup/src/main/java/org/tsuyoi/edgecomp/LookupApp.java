@@ -10,5 +10,6 @@ public class LookupApp {
                 "user", "password");
         LookupResult result = client.lookupUserInfo("1234");
         System.out.println("Result: " + result);
+        System.out.println("Result Created: " + result.getCreated().getTime());
     }
 }
