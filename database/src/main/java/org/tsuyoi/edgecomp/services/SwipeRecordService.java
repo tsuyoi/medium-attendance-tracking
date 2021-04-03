@@ -19,7 +19,7 @@ import java.util.List;
 public class SwipeRecordService {
     private static CLogger logger;
 
-    public static void initializeCresco(PluginBuilder pluginBuilder) {
+    public static void setPluginBuilder(PluginBuilder pluginBuilder) {
         logger = pluginBuilder.getLogger(SwipeRecordService.class.getName(), CLogger.Level.Info);
         SessionFactoryManager.setPluginBuilder(pluginBuilder);
     }

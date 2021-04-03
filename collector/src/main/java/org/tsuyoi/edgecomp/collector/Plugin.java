@@ -8,6 +8,8 @@ import io.cresco.library.plugin.PluginService;
 import io.cresco.library.utilities.CLogger;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.*;
+import org.tsuyoi.edgecomp.services.SwipeRecordService;
+import org.tsuyoi.edgecomp.utilities.SessionFactoryManager;
 
 import java.util.Map;
 
@@ -79,6 +81,8 @@ public class Plugin implements PluginService {
                 //set plugin active
                 pluginBuilder.setIsActive(true);
 
+                SessionFactoryManager.setPluginBuilder(pluginBuilder);
+                SwipeRecordService.setPluginBuilder(pluginBuilder);
                 collectionEngine.start();
             }
             return true;
