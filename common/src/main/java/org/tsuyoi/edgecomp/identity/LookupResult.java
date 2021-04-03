@@ -10,6 +10,7 @@ public class LookupResult {
     private final Date created = new Date();
 
     private LookupRequest request;
+    private boolean success;
     private String userName;
     private String userEmail;
     private String userFirstName;
@@ -17,10 +18,12 @@ public class LookupResult {
 
     public LookupResult(LookupRequest request) {
         setRequest(request);
+        setSuccess(false);
     }
 
     public LookupResult(LookupRequest request, String username, String email, String firstName, String lastName) {
         this(request);
+        setSuccess(true);
         setUserName(username);
         setUserEmail(email);
         setUserFirstName(firstName);
@@ -32,6 +35,13 @@ public class LookupResult {
     }
     public void setRequest(LookupRequest request) {
         this.request = request;
+    }
+
+    public boolean getSuccess() {
+        return success;
+    }
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public Date getCreated() {
@@ -75,6 +85,7 @@ public class LookupResult {
     public Map<String, Object> toJson() {
         Map<String, Object> properties = new HashMap<>();
         properties.put("request", getRequest().toJson());
+        properties.put("success", getSuccess());
         properties.put("created", getCreated());
         properties.put("userName", getUserName());
         properties.put("userEmail", getUserEmail());

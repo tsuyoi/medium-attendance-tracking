@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>identity</artifactId>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
 
   <name>Identity Service Module</name>
 
@@ -24,6 +24,10 @@
       <groupId>org.tsuyoi.edgecomp</groupId>
       <artifactId>common</artifactId>
       <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
     </dependency>
   </dependencies>
 
@@ -40,53 +44,35 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>${maven.jar.version}</version>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${maven.assembly.version}</version>
         <configuration>
           <archive>
             <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>${mainClass}</mainClass>
+              <mainClass>org.tsuyoi.edgecomp.IdentityApp</mainClass>
             </manifest>
+            <manifestEntries>
+              <artifactId>IdentityApp</artifactId>
+              <Implementation-Version>${project.version}.${maven.build.timestamp}</Implementation-Version>
+            </manifestEntries>
           </archive>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>${maven.shade.version}</version>
         <executions>
           <execution>
+            <id>make-assembly</id>
             <phase>package</phase>
             <goals>
-              <goal>shade</goal>
+              <goal>single</goal>
             </goals>
-            <configuration>
-              <finalName>${jarName}</finalName>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-            </configuration>
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>${maven.bundle.compiler.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-            <Bundle-Name>AttendanceTrackingIdentity</Bundle-Name>
-            <Bundle-Description>Identity module for attendance tracking application</Bundle-Description>
-            <Bundle-Vendor>Caylin Hickey</Bundle-Vendor>
-            <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
-            <Export-Package>org.tsuyoi.edgecomp.*;</Export-Package>
-            <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
-            <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
-          </instructions>
-        </configuration>
-      </plugin>
     </plugins>
+    <finalName>${project.artifactId}-${project.version}</finalName>
   </build>
 </project>

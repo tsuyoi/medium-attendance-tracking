@@ -7,6 +7,7 @@ import io.cresco.library.data.TopicType;
 import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.utilities.CLogger;
 import org.tsuyoi.edgecomp.lookup.LookupClient;
+import org.tsuyoi.edgecomp.services.SwipeRecordService;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -52,7 +53,7 @@ public class CollectionEngine {
                                     swipe.getCrescoRegion(), swipe.getCrescoAgent(), swipe.getCrescoPlugin(),
                                     swipe.getTsAsDate());
                             swipe.addLookupResult(lookupClient.lookupUserInfo(swipe.getUserId()));
-                            // Todo: Save the swipe
+                            SwipeRecordService.create(swipe);
                             TextMessage updateMsg = pluginBuilder.getAgentService().getDataPlaneService()
                                     .createTextMessage();
                             updateMsg.setText(gson.toJson(swipe));

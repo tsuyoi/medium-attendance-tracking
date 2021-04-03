@@ -54,7 +54,6 @@ public class LookupClient {
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 String result = EntityUtils.toString(entity);
-                System.out.println("Response: " + result);
                 Gson gson = new Gson();
                 try {
                     ret = gson.fromJson(result, LookupResult.class);

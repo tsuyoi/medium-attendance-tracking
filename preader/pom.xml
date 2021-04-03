@@ -20,21 +20,44 @@
       <artifactId>common</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.8.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.19</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>2.2</version>
+    </dependency>
 
     <dependency>
       <groupId>org.tsuyoi.edgecomp</groupId>
       <artifactId>reader</artifactId>
       <version>1.0-SNAPSHOT</version>
     </dependency>
-
     <dependency>
       <groupId>org.hid4java</groupId>
       <artifactId>hid4java</artifactId>
     </dependency>
-
     <dependency>
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.9</version>
     </dependency>
   </dependencies>
 
@@ -63,7 +86,6 @@
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
             <Bundle-Activator>org.tsuyoi.edgecomp.preader.Activator</Bundle-Activator>
             <Import-Package>*;resolution:=optional</Import-Package>
-            <Export-Package>org.tsuyoi.edgecomp.*;com.google.gson.*;org.hid4java.*;org.apache.*;com.sun.jna.*</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>

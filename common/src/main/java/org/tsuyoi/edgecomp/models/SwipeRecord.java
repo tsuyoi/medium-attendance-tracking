@@ -30,7 +30,7 @@ public class SwipeRecord {
     private String userLastName;
     @Column( name = "user_email" )
     private String userEmail;
-    @Column( name = "error" )
+    @Column( name = "error_msg" )
     private String error;
 
 
@@ -43,13 +43,18 @@ public class SwipeRecord {
 
     public SwipeRecord() {
         this.id = java.util.UUID.randomUUID().toString();
+        this.ts = new Date().getTime();
     }
-
-    public SwipeRecord(String site, String swipe, String id) {
+    
+    public SwipeRecord(String site, String swipe) {
         this();
         setSite(site);
         setSwipe(swipe);
-        setId(id);
+    }
+
+    public SwipeRecord(String site, String swipe, String id) {
+        this(site, swipe);
+        setUserId(id);
     }
 
     public SwipeRecord(String site, String swipe, String id, String region, String agent, String plugin) {
