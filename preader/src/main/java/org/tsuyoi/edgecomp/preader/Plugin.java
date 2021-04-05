@@ -2,7 +2,6 @@ package org.tsuyoi.edgecomp.preader;
 
 import io.cresco.library.agent.AgentService;
 import io.cresco.library.messaging.MsgEvent;
-import io.cresco.library.plugin.Executor;
 import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.plugin.PluginService;
 import io.cresco.library.utilities.CLogger;
@@ -13,6 +12,7 @@ import org.tsuyoi.edgecomp.reader.CardReaderTask;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @Component(
         service = { PluginService.class },
         scope= ServiceScope.PROTOTYPE,
@@ -23,7 +23,6 @@ import java.util.Map;
 public class Plugin implements PluginService {
     public BundleContext context;
     private PluginBuilder pluginBuilder;
-    private Executor executor;
     private CLogger logger;
     private Map<String,Object> map;
     private CardReader cardReader;
@@ -70,17 +69,17 @@ public class Plugin implements PluginService {
             if(pluginBuilder == null) {
                 pluginBuilder = new PluginBuilder(this.getClass().getName(), context, map);
                 this.logger = pluginBuilder.getLogger(Plugin.class.getName(), CLogger.Level.Trace);
-                this.executor = new PluginExecutor(pluginBuilder);
-                pluginBuilder.setExecutor(executor);
+                pluginBuilder.setExecutor(new PluginExecutor(pluginBuilder));
 
                 while (!pluginBuilder.getAgentService().getAgentState().isActive()) {
                     logger.info("Plugin " + pluginBuilder.getPluginID() + " waiting on Agent Init");
                     Thread.sleep(1000);
                 }
-                //set plugin active
                 pluginBuilder.setIsActive(true);
 
+                // Generate card reader task
                 CardReaderTask task = new PluginReaderTask(pluginBuilder);
+                // Create and start card reader
                 cardReader = new CardReader(0x0801, 0x01, 8, null, task);
                 cardReader.start();
             }
@@ -97,7 +96,7 @@ public class Plugin implements PluginService {
     public boolean isStopped() {
         if (cardReader != null)
             cardReader.stop();
-        if(pluginBuilder != null) {
+        if (pluginBuilder != null) {
             pluginBuilder.setExecutor(null);
             pluginBuilder.setIsActive(false);
         }

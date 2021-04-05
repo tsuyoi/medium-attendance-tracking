@@ -2,7 +2,6 @@ package org.tsuyoi.edgecomp.collector;
 
 import io.cresco.library.agent.AgentService;
 import io.cresco.library.messaging.MsgEvent;
-import io.cresco.library.plugin.Executor;
 import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.plugin.PluginService;
 import io.cresco.library.utilities.CLogger;
@@ -13,6 +12,7 @@ import org.tsuyoi.edgecomp.utilities.SessionFactoryManager;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 @Component(
         service = { PluginService.class },
         scope= ServiceScope.PROTOTYPE,
@@ -23,7 +23,6 @@ import java.util.Map;
 public class Plugin implements PluginService {
     public BundleContext context;
     private PluginBuilder pluginBuilder;
-    private Executor executor;
     private CLogger logger;
     private Map<String,Object> map;
     private CollectionEngine collectionEngine;
@@ -37,9 +36,9 @@ public class Plugin implements PluginService {
     @Modified
     void modified(BundleContext context, Map<String, Object> map) {
         if (logger != null)
-            logger.info("Modified Config Map PluginID:" + (String) map.get("pluginID"));
+            logger.info("Modified Config Map PluginID:" + map.get("pluginID"));
         else
-            System.out.println("Modified Config Map PluginID:" + (String) map.get("pluginID"));
+            System.out.println("Modified Config Map PluginID:" + map.get("pluginID"));
     }
 
     @Deactivate
@@ -71,18 +70,18 @@ public class Plugin implements PluginService {
                 pluginBuilder = new PluginBuilder(this.getClass().getName(), context, map);
                 this.logger = pluginBuilder.getLogger(Plugin.class.getName(), CLogger.Level.Trace);
                 this.collectionEngine = new CollectionEngine(pluginBuilder);
-                this.executor = new ExecutorImpl(pluginBuilder, collectionEngine);
-                pluginBuilder.setExecutor(executor);
+                pluginBuilder.setExecutor(new ExecutorImpl(pluginBuilder, collectionEngine));
 
                 while (!pluginBuilder.getAgentService().getAgentState().isActive()) {
                     logger.info("Plugin " + pluginBuilder.getPluginID() + " waiting on Agent Init");
                     Thread.sleep(1000);
                 }
-                //set plugin active
                 pluginBuilder.setIsActive(true);
 
+                // Propogate pluginBuilder for logging/messaging purposes
                 SessionFactoryManager.setPluginBuilder(pluginBuilder);
                 SwipeRecordService.setPluginBuilder(pluginBuilder);
+                // Start collection engine
                 collectionEngine.start();
             }
             return true;
@@ -98,7 +97,7 @@ public class Plugin implements PluginService {
     public boolean isStopped() {
         if (collectionEngine != null)
             collectionEngine.stop();
-        if(pluginBuilder != null) {
+        if (pluginBuilder != null) {
             pluginBuilder.setExecutor(null);
             pluginBuilder.setIsActive(false);
         }
