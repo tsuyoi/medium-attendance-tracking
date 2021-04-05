@@ -54,7 +54,7 @@
               <mainClass>org.tsuyoi.edgecomp.LookupApp</mainClass>
             </manifest>
             <manifestEntries>
-              <artifactId>IdentityApp</artifactId>
+              <artifactId>LookupApp</artifactId>
               <Implementation-Version>${project.version}.${maven.build.timestamp}</Implementation-Version>
             </manifestEntries>
           </archive>

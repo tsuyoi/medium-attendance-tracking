@@ -26,7 +26,6 @@ public class Plugin implements PluginService {
     private Executor executor;
     private CLogger logger;
     private Map<String,Object> map;
-    private CardReaderTask cardReaderTask;
     private CardReader cardReader;
 
     @Activate

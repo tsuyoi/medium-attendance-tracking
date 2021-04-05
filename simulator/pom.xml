@@ -77,9 +77,7 @@
             <Bundle-Version>${project.version}-${maven.build.timestamp}</Bundle-Version>
             <Bundle-Activator>org.tsuyoi.edgecomp.simulator.Activator</Bundle-Activator>
             <Import-Package>*;resolution:=optional</Import-Package>
-            <Export-Package>org.tsuyoi.edgecomp.simulator;org.tsuyoi.edgecomp.common;</Export-Package>
             <Embed-Dependency>!org.osgi.*;!osgi.cmpn.*;!library;*</Embed-Dependency>
-            <Provide-Capability>osgi.service;objectClass=task.TaskService</Provide-Capability>
             <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
           </instructions>
         </configuration>

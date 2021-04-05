@@ -8,23 +8,21 @@ import io.cresco.library.plugin.PluginBuilder;
 import io.cresco.library.utilities.CLogger;
 import org.tsuyoi.edgecomp.lookup.LookupClient;
 import org.tsuyoi.edgecomp.services.SwipeRecordService;
+import org.tsuyoi.edgecomp.utilities.RollingFileAppender;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 public class CollectionEngine {
     final private PluginBuilder pluginBuilder;
     final private CLogger logger;
     final private LookupClient lookupClient;
+    private RollingFileAppender backupFileAppender;
 
-    private String siteId;
     private String listenerId = null;
-
-    private List<SwipeRecord> records = new ArrayList<>();
-    private List<String> ids = new ArrayList<>();
 
     public CollectionEngine(PluginBuilder pluginBuilder) {
         this.pluginBuilder = pluginBuilder;
@@ -37,7 +35,14 @@ public class CollectionEngine {
                 pluginBuilder.getConfig().getStringParam("lookup_username", "user"),
                 pluginBuilder.getConfig().getStringParam("lookup_password", "password")
         );
-        setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
+        try {
+            backupFileAppender = new RollingFileAppender(Paths.get(pluginBuilder.getConfig().getStringParam("swipe_logs", "swipe_logs")));
+        } catch (IllegalArgumentException e) {
+            logger.error("Error creating swipe backup log utility: {}", e.getMessage());
+        } catch (IOException e) {
+            logger.error("Error creating swipe backup log utility: {}", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void start() {
@@ -53,6 +58,7 @@ public class CollectionEngine {
                                     swipe.getCrescoRegion(), swipe.getCrescoAgent(), swipe.getCrescoPlugin(),
                                     swipe.getTsAsDate());
                             swipe.addLookupResult(lookupClient.lookupUserInfo(swipe.getUserId()));
+                            backupSwipe(swipe);
                             SwipeRecordService.create(swipe);
                             TextMessage updateMsg = pluginBuilder.getAgentService().getDataPlaneService()
                                     .createTextMessage();
@@ -84,24 +90,28 @@ public class CollectionEngine {
         }
     }
 
-    public String getSiteId() {
-        return siteId;
-    }
-    public void setSiteId(String siteId) {
-        this.siteId = siteId;
-    }
-
-    public List<SwipeRecord> getRecords() {
-        return records;
-    }
-    public void setRecords(List<SwipeRecord> records) {
-        this.records = records;
-    }
-
-    public List<String> getIds() {
-        return ids;
-    }
-    public void setIds(List<String> ids) {
-        this.ids = ids;
+    private void backupSwipe(SwipeRecord swipeRecord) {
+        if (backupFileAppender != null && swipeRecord != null)
+            try {
+                backupFileAppender.append(String.format("%s,%s,%s,%s,%s,%s,%s,%s",
+                        swipeRecord.getTsAsDate(),
+                        swipeRecord.getSite(),
+                        swipeRecord.getId(),
+                        (swipeRecord.getUserId() != null) ? swipeRecord.getUserId() : "",
+                        (swipeRecord.getUserEmail() != null) ? swipeRecord.getUserEmail() : "",
+                        (swipeRecord.getUserFirstName() != null) ? swipeRecord.getUserFirstName() : "",
+                        (swipeRecord.getUserLastName() != null) ? swipeRecord.getUserLastName() : "",
+                        (swipeRecord.getError() != null) ? swipeRecord.getError() : ""));
+            } catch (IOException e) {
+                logger.error("Failed to log swipe ({},{},{},{},{},{},{},{})",
+                        swipeRecord.getTsAsDate(),
+                        swipeRecord.getSite(),
+                        swipeRecord.getId(),
+                        (swipeRecord.getUserId() != null) ? swipeRecord.getUserId() : "",
+                        (swipeRecord.getUserEmail() != null) ? swipeRecord.getUserEmail() : "",
+                        (swipeRecord.getUserFirstName() != null) ? swipeRecord.getUserFirstName() : "",
+                        (swipeRecord.getUserLastName() != null) ? swipeRecord.getUserLastName() : "",
+                        (swipeRecord.getError() != null) ? swipeRecord.getError() : "");
+            }
     }
 }

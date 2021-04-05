@@ -9,16 +9,20 @@ import org.hid4java.HidDevice;
 import org.tsuyoi.edgecomp.common.PluginStatics;
 import org.tsuyoi.edgecomp.models.SwipeRecord;
 import org.tsuyoi.edgecomp.reader.CardReaderTask;
+import org.tsuyoi.edgecomp.utilities.RollingFileAppender;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PluginReaderTask implements CardReaderTask {
+    private final PluginBuilder pluginBuilder;
+    private final CLogger logger;
     private String data;
-    private PluginBuilder pluginBuilder;
-    private CLogger logger;
+    private RollingFileAppender backupFileAppender;
 
     private String siteId;
 
@@ -27,6 +31,14 @@ public class PluginReaderTask implements CardReaderTask {
         this.logger = pluginBuilder.getLogger(PluginReaderTask.class.getName(), CLogger.Level.Info);
         setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
         this.data = "";
+        try {
+            backupFileAppender = new RollingFileAppender(Paths.get(pluginBuilder.getConfig().getStringParam("swipe_logs", "swipe_logs")));
+        } catch (IllegalArgumentException e) {
+            logger.error("Error creating swipe backup log utility: {}", e.getMessage());
+        } catch (IOException e) {
+            logger.error("Error creating swipe backup log utility: {}", e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public String getSiteId() {
@@ -79,6 +91,7 @@ public class PluginReaderTask implements CardReaderTask {
                     id = data.substring(stripeThreeStart, stripeThreeEnd);
                 SwipeRecord record = new SwipeRecord(getSiteId(), data, id,
                         pluginBuilder.getRegion(), pluginBuilder.getAgent(), pluginBuilder.getPluginID());
+                backupSwipe(record);
                 logger.info("New record: {}", record);
                 try {
                     TextMessage updateMsg = pluginBuilder.getAgentService().getDataPlaneService()
@@ -99,6 +112,23 @@ public class PluginReaderTask implements CardReaderTask {
                 data += character;
             }
         }
+    }
+
+    private void backupSwipe(SwipeRecord swipeRecord) {
+        if (backupFileAppender != null && swipeRecord != null)
+            try {
+                backupFileAppender.append(String.format("%s,%s,%s,%s",
+                        swipeRecord.getTsAsDate(),
+                        swipeRecord.getSite(),
+                        swipeRecord.getSwipe(),
+                        swipeRecord.getId()));
+            } catch (IOException e) {
+                logger.error("Failed to log swipe ({},{},{},{})",
+                        swipeRecord.getTsAsDate(),
+                        swipeRecord.getSite(),
+                        swipeRecord.getSwipe(),
+                        swipeRecord.getId());
+            }
     }
 
     @Override
