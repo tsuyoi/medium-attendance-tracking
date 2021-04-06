@@ -24,6 +24,7 @@ public class Plugin implements PluginService {
     private CLogger logger;
     private Map<String,Object> map;
     private CardReader cardReader;
+    private FileReader fileReader;
 
     @Activate
     void activate(BundleContext context, Map<String, Object> map) {
@@ -68,6 +69,7 @@ public class Plugin implements PluginService {
                 pluginBuilder = new PluginBuilder(this.getClass().getName(), context, map);
                 this.logger = pluginBuilder.getLogger(Plugin.class.getName(), CLogger.Level.Trace);
                 cardReader = new CardReader(pluginBuilder);
+                fileReader = new FileReader(pluginBuilder);
                 pluginBuilder.setExecutor(new ExecutorImpl(pluginBuilder, cardReader));
 
                 while (!pluginBuilder.getAgentService().getAgentState().isActive()) {
@@ -76,8 +78,11 @@ public class Plugin implements PluginService {
                 }
                 pluginBuilder.setIsActive(true);
 
-                // Start card reader
-                cardReader.start();
+                // Start a reader
+                if (pluginBuilder.getConfig().getStringParam("file_to_watch") != null)
+                    fileReader.start();
+                else
+                    cardReader.start();
             }
             return true;
         } catch(Exception ex) {
@@ -92,6 +97,8 @@ public class Plugin implements PluginService {
     public boolean isStopped() {
         if (cardReader != null)
             cardReader.stop();
+        if (fileReader != null)
+            fileReader.stop();
         if (pluginBuilder != null) {
             pluginBuilder.setExecutor(null);
             pluginBuilder.setIsActive(false);

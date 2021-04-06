@@ -34,6 +34,7 @@ public class SwipeRecordService {
             session.getTransaction().commit();
             return object;
         } catch (Exception e) {
+            e.printStackTrace();
             if (session.getTransaction().getStatus() == TransactionStatus.ACTIVE ||
                     session.getTransaction().getStatus() == TransactionStatus.MARKED_ROLLBACK)
                 session.getTransaction().rollback();
