@@ -113,7 +113,7 @@ public class SessionFactoryManager {
                     --------------------
                     - db_filepath
                  */
-                    logger.info("Database type is H2");
+                    logger.trace("Database type is H2");
                     String dbFilePathStr = pluginBuilder.getConfig().getStringParam("db_filepath");
                     if (dbFilePathStr == null || dbFilePathStr.equals("")) {
                         logger.error("Required parameter [db_filepath] not provided");
@@ -156,7 +156,7 @@ public class SessionFactoryManager {
                     --------------------
                     - db_port                       (defaults to 1433)
                  */
-                    logger.info("Database type is Microsoft SQL Server");
+                    logger.trace("Database type is Microsoft SQL Server");
                     dbServer = pluginBuilder.getConfig().getStringParam("db_server");
                     dbPort = pluginBuilder.getConfig().getStringParam("db_port", "1433");
                     if (dbServer == null || dbServer.equals("")) {
@@ -177,8 +177,8 @@ public class SessionFactoryManager {
                             dbServer, dbPort, dbName
                     );
                     try {
-                        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                        Connection testMySQLConnection = DriverManager.getConnection(mssqlURL);
+                        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+                        Connection testMySQLConnection = DriverManager.getConnection(mssqlURL, dbUser, dbPassword);
                         testMySQLConnection.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -210,7 +210,7 @@ public class SessionFactoryManager {
                     - db_timezone           MySQL server timezone (defaults to UTC)
                     - db_auto_rec           Auto reconnect to MySQL server (defaults to true)
                  */
-                    logger.info("Database type is MySQL");
+                    logger.trace("Database type is MySQL");
                     dbServer = pluginBuilder.getConfig().getStringParam("db_server");
                     dbPort = pluginBuilder.getConfig().getStringParam("db_port", "3306");
                     String dbCharacterEncoding = pluginBuilder.getConfig().getStringParam("db_char_enc", "UTF-8");
@@ -234,8 +234,8 @@ public class SessionFactoryManager {
                             dbServer, dbPort, dbName, dbCharacterEncoding, dbTimezone, dbAutoReconnect
                     );
                     try {
-                        Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection testMySQLConnection = DriverManager.getConnection(mysqlURL);
+                        Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+                        Connection testMySQLConnection = DriverManager.getConnection(mysqlURL, dbUser, dbPassword);
                         testMySQLConnection.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -267,8 +267,6 @@ public class SessionFactoryManager {
             settings.put(Environment.SHOW_SQL, Boolean.toString(dbShowSQL));
             settings.put(Environment.AUTOCOMMIT, Boolean.toString(dbAutoCommit));
 
-            logger.info("Settings: {}", settings);
-
             // Apply settings
             registryBuilder.applySettings(settings);
 
@@ -284,7 +282,7 @@ public class SessionFactoryManager {
 
             try {
                 factory = metadata.getSessionFactoryBuilder().build();
-                logger.info("Successfully built database session factory.");
+                logger.trace("Successfully built database session factory.");
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -300,7 +298,7 @@ public class SessionFactoryManager {
 
     public static Session getSession() {
         try {
-            logger.info("Grabbing database session from factory");
+            logger.trace("Grabbing database session from factory");
             if (factory == null)
                 if (!buildSession())
                     return null;
@@ -312,8 +310,10 @@ public class SessionFactoryManager {
     }
 
     public static void close() {
-        logger.info("Closing down session factory");
-        if ( factory != null )
+        logger.trace("Closing down session factory");
+        if ( factory != null ) {
             factory.close();
+            factory = null;
+        }
     }
 }

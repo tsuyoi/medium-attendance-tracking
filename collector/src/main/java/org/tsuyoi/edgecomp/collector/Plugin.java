@@ -39,6 +39,8 @@ public class Plugin implements PluginService {
             logger.info("Modified Config Map PluginID:" + map.get("pluginID"));
         else
             System.out.println("Modified Config Map PluginID:" + map.get("pluginID"));
+        SessionFactoryManager.close();
+        collectionEngine.loadConfig();
     }
 
     @Deactivate

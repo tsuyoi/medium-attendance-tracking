@@ -29,8 +29,16 @@ public class PluginReaderTask implements CardReaderTask {
     public PluginReaderTask(PluginBuilder pluginBuilder) {
         this.pluginBuilder = pluginBuilder;
         this.logger = pluginBuilder.getLogger(PluginReaderTask.class.getName(), CLogger.Level.Info);
-        setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
         this.data = "";
+        loadConfig();
+    }
+
+    public void loadConfig() {
+        setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
+        buildBackupFileAppender();
+    }
+
+    private void buildBackupFileAppender() {
         try {
             backupFileAppender = new RollingFileAppender(Paths.get(pluginBuilder.getConfig().getStringParam("swipe_logs", "swipe_logs")));
         } catch (IllegalArgumentException e) {

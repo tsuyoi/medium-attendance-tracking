@@ -31,6 +31,10 @@ public class FileReader {
     public FileReader(PluginBuilder pluginBuilder) {
         this.pluginBuilder = pluginBuilder;
         this.logger = pluginBuilder.getLogger(CardReader.class.getName(), CLogger.Level.Trace);
+        loadConfig();
+    }
+
+    public void loadConfig() {
         setFileToWatch(Paths.get(pluginBuilder.getConfig().getStringParam("file_to_watch")));
         setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
         setCheckDelay(pluginBuilder.getConfig().getIntegerParam("check_delay", 1000));
@@ -105,7 +109,7 @@ public class FileReader {
         @Override
         public void run() {
             Gson gson = new Gson();
-            logger.info("Checking: " + fileToWatch);
+            logger.trace("Checking: " + fileToWatch);
             try {
                 String contents = new String(Files.readAllBytes(fileToWatch)).trim();
                 if (contents.length() > 0) {

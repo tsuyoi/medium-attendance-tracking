@@ -19,7 +19,8 @@ import java.nio.file.Paths;
 public class CollectionEngine {
     final private PluginBuilder pluginBuilder;
     final private CLogger logger;
-    final private LookupClient lookupClient;
+    private boolean useLookupClient;
+    private LookupClient lookupClient;
     private RollingFileAppender backupFileAppender;
 
     private String listenerId = null;
@@ -27,6 +28,16 @@ public class CollectionEngine {
     public CollectionEngine(PluginBuilder pluginBuilder) {
         this.pluginBuilder = pluginBuilder;
         this.logger = pluginBuilder.getLogger(CollectionEngine.class.getName(), CLogger.Level.Trace);
+        loadConfig();
+    }
+
+    public void loadConfig() {
+        buildLookupClient();
+        buildBackupFileAppender();
+    }
+
+    private void buildLookupClient() {
+        this.useLookupClient = pluginBuilder.getConfig().getBooleanParam("lookup_swipes", true);
         this.lookupClient = new LookupClient(
                 pluginBuilder.getConfig().getStringParam("lookup_url", "localhost"),
                 pluginBuilder.getConfig().getIntegerParam("lookup_port", 8500),
@@ -35,6 +46,9 @@ public class CollectionEngine {
                 pluginBuilder.getConfig().getStringParam("lookup_username", "user"),
                 pluginBuilder.getConfig().getStringParam("lookup_password", "password")
         );
+    }
+
+    private void buildBackupFileAppender() {
         try {
             backupFileAppender = new RollingFileAppender(Paths.get(pluginBuilder.getConfig().getStringParam("swipe_logs", "swipe_logs")));
         } catch (IllegalArgumentException e) {
@@ -57,7 +71,8 @@ public class CollectionEngine {
                             logger.info("Received: {} from {} ({}-{}-{}) at {}", swipe.getId(), swipe.getSite(),
                                     swipe.getCrescoRegion(), swipe.getCrescoAgent(), swipe.getCrescoPlugin(),
                                     swipe.getTsAsDate());
-                            swipe.addLookupResult(lookupClient.lookupUserInfo(swipe.getUserId()));
+                            if (useLookupClient)
+                                swipe.addLookupResult(lookupClient.lookupUserInfo(swipe.getUserId()));
                             backupSwipe(swipe);
                             SwipeRecordService.create(swipe);
                             TextMessage updateMsg = pluginBuilder.getAgentService().getDataPlaneService()

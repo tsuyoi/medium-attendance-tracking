@@ -25,6 +25,7 @@ public class Plugin implements PluginService {
     private PluginBuilder pluginBuilder;
     private CLogger logger;
     private Map<String,Object> map;
+    private PluginReaderTask pluginReaderTask;
     private CardReader cardReader;
 
     @Activate
@@ -39,6 +40,7 @@ public class Plugin implements PluginService {
             logger.info("Modified Config Map PluginID:" + map.get("pluginID"));
         else
             System.out.println("Modified Config Map PluginID:" + map.get("pluginID"));
+        pluginReaderTask.loadConfig();
     }
 
     @Deactivate
@@ -78,9 +80,9 @@ public class Plugin implements PluginService {
                 pluginBuilder.setIsActive(true);
 
                 // Generate card reader task
-                CardReaderTask task = new PluginReaderTask(pluginBuilder);
+                PluginReaderTask pluginReaderTask = new PluginReaderTask(pluginBuilder);
                 // Create and start card reader
-                cardReader = new CardReader(0x0801, 0x01, 8, null, task);
+                cardReader = new CardReader(0x0801, 0x01, 8, null, pluginReaderTask);
                 cardReader.start();
             }
             return true;

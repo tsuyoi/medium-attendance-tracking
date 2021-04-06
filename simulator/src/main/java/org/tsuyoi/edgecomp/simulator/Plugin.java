@@ -38,6 +38,21 @@ public class Plugin implements PluginService {
             logger.info("Modified Config Map PluginID:" + map.get("pluginID"));
         else
             System.out.println("Modified Config Map PluginID:" + map.get("pluginID"));
+        if (cardReader != null) {
+            cardReader.stop();
+            cardReader = null;
+        }
+        if (fileReader != null) {
+            fileReader.stop();
+            fileReader = null;
+        }
+        if (pluginBuilder.getConfig().getStringParam("file_to_watch") != null) {
+            fileReader = new FileReader(pluginBuilder);
+            fileReader.start();
+        } else {
+            cardReader = new CardReader(pluginBuilder);
+            cardReader.start();
+        }
     }
 
     @Deactivate
@@ -68,8 +83,6 @@ public class Plugin implements PluginService {
             if(pluginBuilder == null) {
                 pluginBuilder = new PluginBuilder(this.getClass().getName(), context, map);
                 this.logger = pluginBuilder.getLogger(Plugin.class.getName(), CLogger.Level.Trace);
-                cardReader = new CardReader(pluginBuilder);
-                fileReader = new FileReader(pluginBuilder);
                 pluginBuilder.setExecutor(new ExecutorImpl(pluginBuilder, cardReader));
 
                 while (!pluginBuilder.getAgentService().getAgentState().isActive()) {
@@ -79,10 +92,13 @@ public class Plugin implements PluginService {
                 pluginBuilder.setIsActive(true);
 
                 // Start a reader
-                if (pluginBuilder.getConfig().getStringParam("file_to_watch") != null)
+                if (pluginBuilder.getConfig().getStringParam("file_to_watch") != null) {
+                    fileReader = new FileReader(pluginBuilder);
                     fileReader.start();
-                else
+                } else {
+                    cardReader = new CardReader(pluginBuilder);
                     cardReader.start();
+                }
             }
             return true;
         } catch(Exception ex) {

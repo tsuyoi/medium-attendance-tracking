@@ -23,6 +23,10 @@ public class CardReader {
     public CardReader(PluginBuilder pluginBuilder) {
         this.pluginBuilder = pluginBuilder;
         this.logger = pluginBuilder.getLogger(CardReader.class.getName(), CLogger.Level.Trace);
+        loadConfig();
+    }
+
+    public void loadConfig() {
         setSiteId(pluginBuilder.getConfig().getStringParam("site_id", pluginBuilder.getAgent()));
     }
 
